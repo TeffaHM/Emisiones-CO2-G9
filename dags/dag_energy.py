@@ -1,5 +1,5 @@
 from airflow import DAG
-from datetime import datetime
+from datetime import datetime, timedelta
 from airflow.utils.dates import days_ago
 from airflow.models import Variable
 
@@ -38,7 +38,7 @@ default_args = {
     'email_on_failure': True,
     'email_on_retry': True,
     'retries': 1,
-    'retry_delay': datetime.timedelta(minutes=1),  # Time between retries
+    'retry_delay': timedelta(minutes=1),  # Time between retries
 }
 
 with DAG("process ETL",
