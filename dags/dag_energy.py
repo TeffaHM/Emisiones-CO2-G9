@@ -15,7 +15,6 @@ from airflow.providers.google.cloud.utils.credentials_provider import get_creden
 from airflow.providers.google.cloud.operators.dataproc import DataprocCreateBatchOperator
 from energy_etl import process_energy
 
-EMAIL  = ['sandtwice5@gmail.com']
 OWNER  = 'Gnine'
 PROJECT_ID = Variable.get("project")
 REGION='us-central1'
@@ -34,11 +33,12 @@ default_args = {
     'owner': OWNER,               
     'depends_on_past': False,         
     'start_date':days_ago(2), # datetime.datetime(2022, 8, 20),
-    'email':EMAIL,
-    'email_on_failure': True,
-    'email_on_retry': True,
+    
+    'email_on_failure': False,
+    'email_on_retry': False,
     'retries': 1,
-    'retry_delay': timedelta(minutes=1)  # Time between retries
+    'retry_delay': timedelta(minutes=1),  # Time between retries
+    'project_id': PROJECT_ID,
 }
 
 with DAG("DAG-poc01-python-funct01",
