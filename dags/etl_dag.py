@@ -8,14 +8,14 @@ from airflow.providers.google.cloud.operators.dataproc import DataprocSubmitPySp
 from airflow.providers.google.cloud.operators.bigquery import BigQueryCreateEmptyDatasetOperator,BigQueryCreateEmptyTableOperator
 from airflow.operators.dummy_operator import DummyOperator
 from airflow.operators.python_operator import PythonOperator
-from airflow.utils import date, trigger_rule
+
 
 
 OWNER  = 'Gnine'
 CLUSTER_NAME="spark-cluster-{{ ds_nodash }}"
 REGION='us-central1'
 PROJECT_ID = Variable.get("project")
-BUCKET_NAME = 'Data_Lake'
+BUCKET_NAME = 'mi_bucket_demo0404'
 PYSPARK_URI_1='gs://mi_bucket_demo0404/01_etl_energy.py'
 PYSPARK_URI_2='gs://mi_bucket_demo0404/02_etl_source.py'
 #PYSPARK_URI_3='gs://mi_bucket_demo0404/etl_spark_industries.py'
