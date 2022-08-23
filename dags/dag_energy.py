@@ -10,7 +10,7 @@ from airflow.providers.google.cloud.operators.bigquery import BigQueryCreateEmpt
 from airflow.contrib.sensors.gcs_sensor import GCSObjectsWithPrefixExistenceSensor, GCSObjectExistenceSensor, GoogleCloudStorageObjectSensor
 from airflow.operators.dummy_operator import DummyOperator
 from airflow.operators.python_operator import PythonOperator
-from airflow.utils import date, trigger_rule
+
 from airflow.providers.google.cloud.utils.credentials_provider import get_credentials_and_project_id
 from airflow.providers.google.cloud.operators.dataproc import DataprocCreateBatchOperator
 from energy_etl import process_energy
