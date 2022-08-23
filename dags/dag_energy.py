@@ -21,7 +21,7 @@ PROJECT_ID = Variable.get("project")
 REGION='us-central1'
 BUCKET_NAME_ENERGY = Variable.get("BUCKET_ENERGY") # energy-46c2377c-2322-11ed-afb6-5a6f18944df6
 OBJECT = "energy" + "_" + datetime.now().strftime("%Y-%m")
-STAGING_BUCKET = Variable.get("STAGING_BUCKET") + '/Energy/' # staging-46c2377c-2322-11ed-afb6-5a6f18944df6
+#STAGING_BUCKET = Variable.get("STAGING_BUCKET") + '/Energy/' # staging-46c2377c-2322-11ed-afb6-5a6f18944df6
 
 def process_objects(**kwargs):
     ti = kwargs['ti']
