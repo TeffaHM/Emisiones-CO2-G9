@@ -17,3 +17,5 @@ steps:
     - '-r'
     - 'plugins'
     - 'gs://us-central1-composer-airflo-ef82c8f2-bucket/plugins'
+options:
+  logging: CLOUD_LOGGING_ONLY
