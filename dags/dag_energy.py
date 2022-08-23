@@ -41,7 +41,7 @@ default_args = {
     'retry_delay': timedelta(minutes=1)  # Time between retries
 }
 
-with DAG("process_etl",
+with DAG("DAG-poc01-python-funct01",
          default_args = default_args,
          catchup = False,
          description='ETL process automatized airflow',
