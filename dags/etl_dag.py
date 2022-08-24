@@ -4,8 +4,8 @@ from airflow.utils.dates import days_ago
 from airflow.models import Variable
 from airflow.operators.dummy_operator import DummyOperator
 from airflow.operators.python_operator import PythonOperator
-from airflow.providers.google.cloud.operators.dataproc import DataprocCreateClusterOperator
-from airflow.providers.google.cloud.operators.dataproc import DataprocDeleteClusterOperator
+"""from airflow.providers.google.cloud.operators.dataproc import DataprocCreateClusterOperator
+from airflow.providers.google.cloud.operators.dataproc import DataprocDeleteClusterOperator"""
 from airflow.providers.google.cloud.operators.dataproc import DataprocSubmitPySparkJobOperator, DataprocSubmitJobOperator, ClusterGenerator
 from airflow.providers.google.cloud.operators.bigquery import BigQueryCreateEmptyDatasetOperator,BigQueryCreateEmptyTableOperator
 from airflow.utils import trigger_rule
@@ -122,13 +122,13 @@ with DAG("pipeline_etl",
             gcp_conn_id='google_cloud_default'          
         )
 
-        delete_cluster = DataprocDeleteClusterOperator(
+        """delete_cluster = DataprocDeleteClusterOperator(
                     task_id="delete_cluster", 
                     project_id=PROJECT_ID, 
                     cluster_name=CLUSTER_NAME, 
                     region=REGION,
                     trigger_rule="all_done"
-        )
+        )"""
 
 
         finish_pipeline = DummyOperator(task_id="finish_pipeline")
@@ -137,4 +137,4 @@ with DAG("pipeline_etl",
         start_pipeline >> submit_job_energy >> t_join
         start_pipeline >> submit_job_source >> t_join
 
-        t_join >> submit_job_bigquery >> delete_cluster >> finish_pipeline
+        t_join >> submit_job_bigquery >> finish_pipeline
