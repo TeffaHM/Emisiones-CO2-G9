@@ -15,7 +15,7 @@ import numpy as np
 nameDAG           = 'DAG-poc01-python-funct03'
 project           = 'proyecto-grupo-emisiones-co2'
 owner             = 'GRUPO-09'
-email             = ['esteffany.huamanraime@gmail.com']
+email             = ['e.huamanraime@pucp.edu.pe']
 GBQ_CONNECTION_ID = 'bigquery_default'
 #######################################################################################
 
