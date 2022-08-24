@@ -15,9 +15,9 @@ from airflow.utils import trigger_rule
 OWNER  = 'Gnine'
 PROJECT_ID = Variable.get("project")
 DATASET_NAME = "analytics_dwh_onu"
-CLUSTER_NAME="spark-cluster-{{ ds_nodash }}"
+CLUSTER_NAME="cluster-e458"
 REGION='us-central1'
-BUCKET_NAME = 'mi_bucket_demo0404' # bucket temp de dataproc
+BUCKET_NAME = 'dataproc-temp-us-central1-129453088219-qshhuzzq' # bucket temp de dataproc
 PYSPARK_URI_1='gs://mi_bucket_demo0404/01_etl_energy.py'
 PYSPARK_URI_2='gs://mi_bucket_demo0404/02_etl_source.py'
 #PYSPARK_URI_3='gs://mi_bucket_demo0404/etl_spark_industries.py'
@@ -40,7 +40,7 @@ PYSPARK_JOB_2 = {
     "pyspark_job": {"main_python_file_uri": PYSPARK_URI_3},
 }"""
 
-CLUSTER_CONFIG = ClusterGenerator(
+"""CLUSTER_CONFIG = ClusterGenerator(
     project_id=PROJECT_ID,
     zone="us-central1-a",
     master_machine_type="n1-standard-2",
@@ -49,7 +49,7 @@ CLUSTER_CONFIG = ClusterGenerator(
     worker_disk_size=300,
     master_disk_size=300,
     storage_bucket=BUCKET_NAME,
-).make()
+).make()"""
 
 default_args = {
     'owner': OWNER,               
@@ -73,13 +73,13 @@ with DAG("pipeline_etl",
 
         # create_dataset = BigQueryCreateEmptyDatasetOperator(task_id="create-dataset", dataset_id = DATASET_NAME)
 
-        create_cluster = DataprocCreateClusterOperator(
+        """create_cluster = DataprocCreateClusterOperator(
                     task_id="create_cluster",
                     project_id= PROJECT_ID,
                     cluster_config=CLUSTER_CONFIG,
                     region=REGION,
                     cluster_name=CLUSTER_NAME,
-        )
+        )"""
 
         submit_job_energy = DataprocSubmitJobOperator(
                     task_id="extract_transform_energy", 
