@@ -53,8 +53,8 @@ def python_func(ds, **kwargs):
 
     custom_string = str(datetime.datetime.utcnow()) + " Lo que se retorna se printea en los logs."
 
-    a_var = 1
-    if a_var == 1:
+    a_var = 2
+    if a_var == 2:
         raise ValueError("Error levantado artificialmente!")
 
     print("Fin de la función python_func")
