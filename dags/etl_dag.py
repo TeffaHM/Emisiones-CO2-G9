@@ -134,9 +134,7 @@ with DAG("pipeline_etl",
         finish_pipeline = DummyOperator(task_id="finish_pipeline")
 
 
-        start_pipeline >> create_cluster
-
-        create_cluster >> submit_job_energy >> t_join
-        create_cluster >> submit_job_source >> t_join
+        start_pipeline >> submit_job_energy >> t_join
+        start_pipeline >> submit_job_source >> t_join
 
         t_join >> submit_job_bigquery >> delete_cluster >> finish_pipeline
