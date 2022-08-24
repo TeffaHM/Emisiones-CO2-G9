@@ -12,7 +12,7 @@ import numpy as np
 #######################################################################################
 # PARAMETROS
 #######################################################################################
-nameDAG           = 'DAG-poc01-python-funct02'
+nameDAG           = 'DAG-poc01-python-funct03'
 project           = 'proyecto-grupo-emisiones-co2'
 owner             = 'GRUPO-09'
 email             = ['esteffany.huamanraime@gmail.com']
@@ -53,7 +53,7 @@ def python_func(ds, **kwargs):
 
     custom_string = str(datetime.datetime.utcnow()) + " Lo que se retorna se printea en los logs."
 
-    a_var = 0
+    a_var = 1
     if a_var == 1:
         raise ValueError("Error levantado artificialmente!")
 
@@ -74,7 +74,7 @@ default_args = {
 
 with DAG(nameDAG,
          default_args = default_args,
-         catchup = True,  # Ver caso catchup = True
+         catchup = False,  # Ver caso catchup = True
          max_active_runs = 3,
          schedule_interval = "50,51,52 16 * * *") as dag: # schedule_interval = None # Caso sin trigger automático | schedule_interval = "0 12 * * *" | "0,2 12 * * *"
 
