@@ -1,28 +1,29 @@
-from airflow import DAG
-import datetime
+from airflow import models
+from datetime import datetime, timedelta
 from airflow.utils.dates import days_ago
 from airflow.models import Variable
+from airflow.operators.dummy_operator import DummyOperator
+from airflow.operators.python_operator import PythonOperator
 from airflow.providers.google.cloud.operators.dataproc import DataprocCreateClusterOperator
 from airflow.providers.google.cloud.operators.dataproc import DataprocDeleteClusterOperator
 from airflow.providers.google.cloud.operators.dataproc import DataprocSubmitPySparkJobOperator, DataprocSubmitJobOperator, ClusterGenerator
 from airflow.providers.google.cloud.operators.bigquery import BigQueryCreateEmptyDatasetOperator,BigQueryCreateEmptyTableOperator
-from airflow.operators.dummy_operator import DummyOperator
-from airflow.operators.python_operator import PythonOperator
+from airflow.utils import trigger_rule
 
 
 
 OWNER  = 'Gnine'
+PROJECT_ID = Variable.get("project")
+DATASET_NAME = "analytics_dwh_onu"
 CLUSTER_NAME="spark-cluster-{{ ds_nodash }}"
 REGION='us-central1'
-PROJECT_ID = Variable.get("project")
-BUCKET_NAME = 'mi_bucket_demo0404'
+BUCKET_NAME = 'mi_bucket_demo0404' # bucket temp de dataproc
 PYSPARK_URI_1='gs://mi_bucket_demo0404/01_etl_energy.py'
 PYSPARK_URI_2='gs://mi_bucket_demo0404/02_etl_source.py'
 #PYSPARK_URI_3='gs://mi_bucket_demo0404/etl_spark_industries.py'
 PYSPARK_URI_4='gs://mi_bucket_demo0404/04_load_datawarehouse.py'
-DATASET_NAME = "analytics_dwh_onu"
 
-PYSPARK_JOB_1 = {   "reference": {"project_id": PROJECT_ID},
+PYSPARK_JOB_1 = {"reference": {"project_id": PROJECT_ID},
     "placement": {"cluster_name": CLUSTER_NAME},
     "pyspark_job": {"main_python_file_uri": PYSPARK_URI_1},
 }
@@ -42,8 +43,8 @@ PYSPARK_JOB_2 = {
 CLUSTER_CONFIG = ClusterGenerator(
     project_id=PROJECT_ID,
     zone="us-central1-a",
-    master_machine_type="n1-standard-1",
-    worker_machine_type="n1-standard-1",
+    master_machine_type="n1-standard-2",
+    worker_machine_type="n1-standard-2",
     num_workers=2,
     worker_disk_size=300,
     master_disk_size=300,
@@ -54,11 +55,10 @@ default_args = {
     'owner': OWNER,               
     'depends_on_past': False,         
     'start_date':days_ago(2), # datetime.datetime(2022, 8, 20),
-
     'email_on_failure': False,
     'email_on_retry': False,
-    'retries': 1,
-    'retry_delay': datetime.timedelta(minutes=1),  # Time between retries
+    'retries': 5,
+    'retry_delay': timedelta(minutes=1),  # Time between retries
 }
 
 with DAG("pipeline_etl",
@@ -66,11 +66,12 @@ with DAG("pipeline_etl",
          catchup = False,
          description='ETL process automatized airflow',
          schedule_interval="@once",
+         user_defined_macros={"project": PROJECT_ID}
         ) as dag:
 
         start_pipeline = DummyOperator(task_id="start_pipeline")
 
-        create_dataset = BigQueryCreateEmptyDatasetOperator(task_id="create-dataset", dataset_id = DATASET_NAME)
+        # create_dataset = BigQueryCreateEmptyDatasetOperator(task_id="create-dataset", dataset_id = DATASET_NAME)
 
         create_cluster = DataprocCreateClusterOperator(
                     task_id="create_cluster",
@@ -133,7 +134,7 @@ with DAG("pipeline_etl",
         finish_pipeline = DummyOperator(task_id="finish_pipeline")
 
 
-        start_pipeline >> create_dataset >> create_cluster
+        start_pipeline >> create_cluster
 
         create_cluster >> submit_job_energy >> t_join
         create_cluster >> submit_job_source >> t_join
